@@ -1,9 +1,8 @@
-# Password Strength Analyzer - By Pooja Sri Harini
 import re
 import random
 import string
 
-def check_password_strength(password):
+def check_password_strength(password: str):
     score = 0
     feedback = []
 
@@ -11,32 +10,32 @@ def check_password_strength(password):
         score += 2
     elif len(password) >= 8:
         score += 1
-        feedback.append("Password 12+ characters iruntha innum strong ah irukkum")
+        feedback.append("Use at least 12 characters for a stronger password.")
     else:
-        feedback.append("Password romba short! Minimum 8 characters venum")
+        feedback.append("Password is too short. Use at least 8 characters.")
 
     if re.search(r"[A-Z]", password):
         score += 1
     else:
-        feedback.append("Oru Capital Letter (A-Z) add pannu")
+        feedback.append("Add at least one uppercase letter (A-Z).")
 
     if re.search(r"[a-z]", password):
         score += 1
     else:
-        feedback.append("Oru Small Letter (a-z) add pannu")
+        feedback.append("Add at least one lowercase letter (a-z).")
 
     if re.search(r"[0-9]", password):
         score += 1
     else:
-        feedback.append("Oru Number (0-9) add pannu")
+        feedback.append("Add at least one number (0-9).")
 
     if re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
         score += 1
     else:
-        feedback.append("Oru Special Character (!@#$) add pannu")
+        feedback.append("Add at least one special character (!@#$).")
 
     if len(set(password)) < len(password) * 0.6:
-        feedback.append("Same letters niraya repeat aaguthu")
+        feedback.append("Avoid repeating the same characters.")
     else:
         score += 1
 
@@ -49,20 +48,24 @@ def check_password_strength(password):
     else:
         strength = "WEAK"
 
-    return strength, score, feedback
+    return score, strength, feedback
 
-def suggest_strong_password():
-    chars = string.ascii_letters + string.digits + "!@#$%^&*"
-    return ''.join(random.choice(chars) for _ in range(14))
+def generate_strong_password(length: int = 14) -> str:
+    characters = string.ascii_letters + string.digits + "!@#$%^&*"
+    return "".join(random.choice(characters) for _ in range(length))
 
-print("=== PASSWORD STRENGTH ANALYZER ===")
-pwd = input("Un password ah type pannu: ")
-strength, score, feedback = check_password_strength(pwd)
-print(f"\nScore: {score}/8")
+# User Input - Password enter panna kekum
+password = input("Enter your password: ")
+
+score, strength, feedback = check_password_strength(password)
+
+print(f"\nScore: {score}/7")
 print(f"Strength: {strength}")
+
 if feedback:
-    print("\nImprove panna:")
-    for f in feedback:
-        print(f"- {f}")
+    print("\nSuggestions to improve:")
+    for item in feedback:
+        print(f" - {item}")
+
 if score < 5:
-    print(f"\nSuggest panna strong password: {suggest_strong_password()}")
+    print(f"\nSuggested strong password: {generate_strong_password()}")
